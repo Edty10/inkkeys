@@ -1,3 +1,6 @@
+# My fork:
+Obviously, this is my own, personal fork of Staaks inkkeys repositiory for his macropad project. I am not really experienced at what I'm doing, so I HIGHLY reccomend looking at the original respository rather than my own.
+
 # inkkeys
 Details and instructions can be found on https://there.oughta.be/a/macro-keyboard
 

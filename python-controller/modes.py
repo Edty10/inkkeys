@@ -18,6 +18,7 @@ from threading import Timer
 from math import ceil, floor
 from PIL import Image, ImageDraw, ImageFont
 from colorsys import hsv_to_rgb
+import pyperclip
 
 #Optional libraries you might want to remove if you do not require them.
 import pycaw                                  # Get volume level in Windows
@@ -189,22 +190,43 @@ class ModeGimp:
 class ModeClipboard:
     jogFunction = ""    #Keeps track of the currently selected function of the jog dial
 
+    clipboard = ""
+    clipboardOne = ""
+    clipboardTwo = ""
+    clipboardThree = ""
+    contents = ""
+
+    def clipboardCopy(number):
+        global clipboard
+        global clipboardOne
+        global clipboardTwo
+        global clipboardThree
+        
+        if number == 0:
+            clipboard = pyperclip.paste()
+        elif number == 1:
+            clipboardOne = pyperclip.paste()
+        elif number == 2:
+            clipboardTwo = pyperclip.paste()
+        elif number == 3:
+            clipboardThree = pyperclip.paste()
+
+    def clipboardPaste(number):
+        if number == 0:
+            pyperclip.copy(clipboard)
+        elif number == 1:
+            pyperclip.copy(clipboardOne)
+        elif number == 2:
+            pyperclip.copy(clipboardTwo)
+        elif number == 3:
+            pyperclip.copy(clipboardThree)
+
     def activate(self, device):
         device.sendTextFor("title", "Clipboard", inverted=True)  #Title
 
-    def clipboardCopy():
-        
-        return 
-
-    def clipboardPaste():
-        return
-
-    ##_PRESS Load clipbard into variable
-    ##_RELEASE exxecute key combo
-
         #Button2 (top left)
         device.sendIconFor(2, "icons/clipboard-plus.png")
-#        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_B), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_Z)]) #Cut to selection (this shortcut appears to be language dependent, so you will probably need to change it)
+        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_C), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Copy to Clipboard
         device.assignKey(KeyCode.SW2_RELEASE, [])
 
         #Button3 (left, second from top)

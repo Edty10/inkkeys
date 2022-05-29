@@ -199,6 +199,9 @@ class ModeClipboard:
     def clipboardPaste():
         return
 
+    ##_PRESS Load clipbard into variable
+    ##_RELEASE exxecute key combo
+
         #Button2 (top left)
         device.sendIconFor(2, "icons/clipboard-plus.png")
 #        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_B), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_Z)]) #Cut to selection (this shortcut appears to be language dependent, so you will probably need to change it)

@@ -6,3 +6,5 @@ This may need the creation of a new "mode" variable, although the definition of 
 There is a debate over whether to use a separate type of mode or inner functions to define separate screens within a mode, but hey *shrug*.
 I will also need a way of getting back "up" a mode which may prove difficult, or of dynamically changing modes.
     How to create a _truly_ global variable?
+
+We could also make a "Change Screen" umm. Screen. This could either be a active for a few seconds when a window is new or be accessible in the usuall way

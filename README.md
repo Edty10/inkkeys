@@ -1,6 +1,12 @@
 # My fork:
 Obviously, this is my own, personal fork of Staaks inkkeys repositiory for his macropad project. I am not really experienced at what I'm doing, so I HIGHLY reccomend looking at the original respository rather than my own.
 
+# Dependencies:
+A couple of installed packages are listed in [requirements.txt](/requirements.txt), but I will also list the pip3 command below:
+
+```
+pip3 install obs-websocket-py paho-mqtt Pillow psutil pulsectl pyserial python-xlib pyperclip pycaw websocket-client
+```
 The original README (from the time I forked) is down below:
 
 # inkkeys

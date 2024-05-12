@@ -195,17 +195,17 @@ class ModeVSCode:
 
         #Button2 (top left)
         device.sendIconFor(2, "icons/play.png")
-        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_P), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Currently just opens the bar at the top
-        device.assignKey(KeyCode.SW2_RELEASE, [])
+        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_P), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_P), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_Y), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_T), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_H), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_O)]) #Currently just opens the bar at the top
+        device.assignKey(KeyCode.SW2_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_N), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_SPACE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_U), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_N), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_ENTER)])
 
         #Button3 (left, second from top)
         device.sendIconFor(3, "icons/circle-fill.png")
-        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_B), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_I)]) #Cut to content (this shortcut appears to be language dependent, so you will probably need to change it)
+        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_F9)]) #Add a breakpoint in current line
         device.assignKey(KeyCode.SW3_RELEASE, [])
 
         #Button4 (left, third from top)
-        device.sendIconFor(4, "icons/crop.png")
-        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_B), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L)]) #Canvas size (this shortcut appears to be language
+        device.sendIconFor(4, "icons/save.png")
+        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_S), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Save
         device.assignKey(KeyCode.SW4_RELEASE, [])
 
         #Button5 (bottom left)
@@ -215,17 +215,17 @@ class ModeVSCode:
 
         #Button6 (top right)
         device.sendIconFor(6, "icons/bug.png")
-        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_V), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)]) #Paste as new image
+        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_F5)]) #Run and Debug
         device.assignKey(KeyCode.SW6_RELEASE, [])
 
         #Button7 (right, second from top)
-        device.sendIconFor(7, "icons/layers-half.png")
-        device.assignKey(KeyCode.SW7_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_N), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)]) #New layer
+        device.sendIconFor(7, "icons/stop-fill.png")
+        device.assignKey(KeyCode.SW7_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_C), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Keyboard Interrupt
         device.assignKey(KeyCode.SW7_RELEASE, [])
 
         #Button8 (right, third from top)
-        device.sendIconFor(8, "icons/arrows-fullscreen.png")
-        device.assignKey(KeyCode.SW8_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)]) #Zom to fill screen
+        device.sendIconFor(8, "icons/node-plus.png")
+        device.assignKey(KeyCode.SW8_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_G), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_PAGE_UP)]) #Head to the Git Commit Message Box
         device.assignKey(KeyCode.SW8_RELEASE, [])
 
         #Button9 (bottom right)
@@ -238,20 +238,20 @@ class ModeVSCode:
 
         #This toggles the jog function and sets up key assignments and the label for the jog dial. It calls "updateDiplay()" if update is not explicitly set to False (for example if you need to update more parts of the display before updating it.)
         def toggleJogFunction(update=True):
-            if self.jogFunction == "size":  #Tool opacity in GIMP
+            if self.jogFunction == "horizontal":  #Tool opacity in GIMP
                 device.clearCallback(KeyCode.JOG)
-                device.sendTextFor(1, "Tool opacity")
-                device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_COMMA), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)])
-                device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_PERIOD), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)])
-                self.jogFunction = "opacity"
+                device.sendTextFor(1, "Scroll")
+                device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_DOWN_ARROW)])
+                device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW)])
+                self.jogFunction = "vertical"
                 if update:
                     device.updateDisplay()
             else:                            #Tool size in GIMP
                 device.clearCallback(KeyCode.JOG)
-                device.sendTextFor(1, "Tool size")
+                device.sendTextFor(1, "Arrows")
                 device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_BRACE)])
                 device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_RIGHT_BRACE)])
-                self.jogFunction = "size"
+                self.jogFunction = "horizontal"
                 if update:
                     device.updateDisplay()
 
@@ -277,6 +277,49 @@ class ModeWord:
     wheel = "" #Used to set next jogFunction
 
     def activate(self, device):
+        def ModeWordReview():
+            device.sendTextFor("title", "Word (Review)", inverted=True)  #Title
+
+            #Button2 (top left)
+            device.sendIconFor(2, "icons/chat-dots.png")
+            device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_M), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE)]) #New Comment
+            device.assignKey(KeyCode.SW2_RELEASE, [])
+
+            #Button3 (left, second from top)
+            device.sendIconFor(3, "icons/chat-right-text.png")
+            device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_V)]) #Previous Comment
+            device.assignKey(KeyCode.SW3_RELEASE, [])
+
+            #Button4 (left, third from top)
+            device.sendIconFor(4, "icons/check2.png")
+            device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_A), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_2), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_M)]) #Page break
+            device.assignKey(KeyCode.SW4_RELEASE, [])
+
+            #Button5 (bottom left)
+            device.sendIconFor(5, "icons/x.png")
+            device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_M)]) #Reject Change
+            device.assignKey(KeyCode.SW5_RELEASE, [])
+
+            #Button6 (top right)
+            device.sendIconFor(6, "icons/chat-trash.png")
+            device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_D), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_D)]) #Delete Comment
+            device.assignKey(KeyCode.SW6_RELEASE, [])
+
+            #Button7 (right, second from top)
+            device.sendIconFor(7, "icons/chat-left-text.png")
+            device.assignKey(KeyCode.SW7_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_N)]) #Next Comment
+            device.assignKey(KeyCode.SW7_RELEASE, [])
+
+            #Button8 (right, third from top)
+            device.sendIconFor(8, "icons/arrow-right-short.png")
+            device.assignKey(KeyCode.SW8_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_H), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_1)]) #Next Change
+            device.assignKey(KeyCode.SW8_RELEASE, [])
+
+            #Button9 (bottom right)
+            device.sendIconFor(9, "icons/check2-all.png")
+            device.assignKey(KeyCode.SW9_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_R), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_A), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_2), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L)]) #Highlight
+            device.assignKey(KeyCode.SW9_RELEASE, [])
+
         def ModeWordDefault():
             device.sendTextFor("title", "Word (Default)", inverted=True)  #Title
 
@@ -338,13 +381,15 @@ class ModeWord:
                             device.updateDisplay()
                     case "review":
                         device.clearCallback(KeyCode.JOG)
-                        device.sendTextFor(1, "Tool opacity")
-                        device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_COMMA), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)])
-                        device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_PERIOD), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)])
+                        ModeWordReview()
+                        device.sendTextFor(1, "Scroll")
+                        device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_DOWN_ARROW), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_DOWN_ARROW), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_DOWN_ARROW)])
+                        device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW)])
+                        device.registerCallback(ModeWordDefault, KeyCode.JOG_PRESS)
                         self.jogFunction = "review"
                         self.wheel = "default"
                         if update:
-                            device.updateDisplay()
+                            device.updateDisplay(True)
                     case _:
                         device.clearCallback(KeyCode.JOG)
                         device.sendTextFor(1, "Page Scroll")

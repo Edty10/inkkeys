@@ -44,8 +44,8 @@ class KeyCode(Enum):
     SW8_RELEASE = "8r"
     SW9_PRESS = "9p"
     SW9_RELEASE = "9r"
-    JOG_CW = "R+"
-    JOG_CCW = "R-"
+    JOG_CW = "R-"
+    JOG_CCW = "R+"
     JOG = "R" # Only for callbacks!
 
 class ActionCode(Enum):

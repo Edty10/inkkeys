@@ -34,9 +34,11 @@ mqtt = InkkeysMqtt(None, DEBUG) #Set address to "None" if you do not want to use
 os.chdir(os.path.dirname(os.path.abspath(__file__))) #Trying to fix the os.load error.
 
 modes = [\
-            {"mode": ModeOBS(), "process": "obs"}, \
+            {"mode": ModeOBS(), "process": "correct.exewillremainmodeontop"}, \
             {"mode": ModeBlender(), "activeWindow": re.compile("^Blender")}, \
             {"mode": ModeGimp(), "activeWindow": re.compile("^gimp.*")}, \
+            {"mode": ModeVSCode(), "activeWindow": re.compile("^.*Visual Studio Code$")}, \
+            {"mode": ModeWord(), "activeWindow": re.compile("^.*Word$")}, \
             {"mode": ModeFallback(mqtt)} \
         ]
 
@@ -70,6 +72,8 @@ def work():
                     activeWindow = window
                     if DEBUG:                   #Enable DEBUG to see the actual name of the current window if you need it to match your modules
                         print("Active window: " + str(activeWindow))
+                        print("Mode: " + str(mode))
+                        #print(processes)
 
                 for i in modes:                 #Iterate over modes and use the first one that matches
                     if ("process" in i and i["process"] in processes) or ("activeWindow" in i and i["activeWindow"].match(activeWindow)) or not ("process" in i or "activeWindow" in i):

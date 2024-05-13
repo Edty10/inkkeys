@@ -692,6 +692,9 @@ class ModeFallback:
             if light != self.lightState:
                 self.lightState = light
                 self.showLightState(device)
+        '''hour = 
+        minute = 
+        leds = [on for i in range(device.nLeds)]'''
         return 10 #Since we only retrieve the current state from the Mqtt class, the 10 seconds do not really control how often the value is querries but how often we react to it. For the CO2 warning, this is a not too intrusive blue flash every 10 seconds and a 10 second delay to update the light state if it has been switched from somewhere else (rare) seems reasonable, too.
 
     #Called to update the icon of button 4, showing the state of the office light (as if I couldn't see it in the real room, but it is a nice touch to update the display accordingly)

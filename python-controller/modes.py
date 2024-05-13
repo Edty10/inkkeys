@@ -22,7 +22,6 @@ import pyperclip
 
 #Optional libraries you might want to remove if you do not require them.
 import pycaw                                  # Get volume level in Windows
-from obswebsocket import obsws, requests, events # Control OBS. This requires the websocket plugin in OBS (https://github.com/Palakis/obs-websocket) and the Python library obs-websocket-py (pip3 install obs-websocket-py, https://github.com/Elektordi/obs-websocket-py)
 
 
         ############# Simple example. For Blender we just set up a few key assignments with corresponding images.
@@ -658,7 +657,7 @@ class ModeFallback:
                 device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_VOL_DOWN)])
                 self.jogFunction = "volume"
                 if update:
-                    device.updateDisplay()
+                    device.updateDisplay(True)
             else:
                 device.clearCallback(KeyCode.JOG)
                 device.sendTextFor(1, "Mouse Wheel")
@@ -666,7 +665,7 @@ class ModeFallback:
                 device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.MOUSE, MouseAxisCode.MOUSE_WHEEL, -1)])
                 self.jogFunction = "wheel"
                 if update:
-                    device.updateDisplay()
+                    device.updateDisplay(True)
 
         device.registerCallback(toggleJogFunction, KeyCode.JOG_PRESS)
         device.assignKey(KeyCode.SW1_PRESS, [])

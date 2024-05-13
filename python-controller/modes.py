@@ -21,7 +21,9 @@ from colorsys import hsv_to_rgb
 import pyperclip
 
 #Optional libraries you might want to remove if you do not require them.
-import pycaw                                  # Get volume level in Windows
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume                                   # Get volume level in Windows
+from comtypes import CLSCTX_ALL                                         #Something Pycaw Requires apparently because it can't just have the things it does as modules
+
 
 
         ############# Simple example. For Blender we just set up a few key assignments with corresponding images.
@@ -546,6 +548,9 @@ class ModeFallback:
     mqtt = None         #The MQTT object defined in mqtt.py. It will be passed when this class is contructed and kept in this variable
     lightState = None   #Current state of the lights in my office. (Keeping track to know when to update the screen)
     demoActive = False  #We have a demo button and this keeps track whether the demo mode is active, so we know when to update the screen
+    speakers = AudioUtilities.GetSpeakers()
+    asv = speakers.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)   #asv stands for "Additional Stupid Variable because I don't see why I need to do this"
+    volume = asv.QueryInterface(IAudioEndpointVolume)                       #sets the volume module up, again, why can't I just import pycaw.volume? 
 
     def __init__(self, mqtt):
         self.mqtt = mqtt
@@ -628,16 +633,15 @@ class ModeFallback:
         ### The jog wheel can be pressed to switch between three functions: Volume control, mouse wheel, arrow keys left/right ###
 
         def showVolume(n):
-            with pulsectl.Pulse('inkkeys') as pulse:
-                sinkList = pulse.sink_list()
-                name = pulse.server_info().default_sink_name
-                for sink in sinkList:
-                    if sink.name == name:
-                        vol = sink.volume.value_flat
-                off = 0x00ff00
-                on = 0xff0000
+            vol = self.volume.GetMasterVolumeLevelScalar()
+            print (vol)
+            on = 0x00ff00
+            off = 0xff0000
+            if vol == 1:
+                leds = [on for i in range(device.nLeds)]
+            else:
                 leds = [on if vol > i/(device.nLeds-1) else off for i in range(device.nLeds)]
-                device.setLeds(leds)
+            device.setLeds(leds)
 
         self.jogFunction = ""
 

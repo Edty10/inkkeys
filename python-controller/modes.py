@@ -19,6 +19,7 @@ from math import ceil, floor
 from PIL import Image, ImageDraw, ImageFont
 from colorsys import hsv_to_rgb
 import pyperclip
+from datetime import datetime
 
 #Optional libraries you might want to remove if you do not require them.
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume                                   # Get volume level in Windows
@@ -276,6 +277,17 @@ class ModeVSCode:
 class ModeWord:
     jogFunction = ""    #Keeps track of the currently selected function of the jog dial
     wheel = "" #Used to set next jogFunction
+    colour = "" #Used to set the next led colour
+        
+    def updateLED(self, device, colour):
+        if colour == "green":
+            leds = [0x002500 for i in range(device.nLeds)] #Sets LEDS to Green
+        elif colour == "red":
+            leds = [0x250000 for i in range(device.nLeds)] #Sets LEDS to Red
+        elif colour == "blue":
+            leds = [0x000025 for i in range(device.nLeds)] #Sets LEDS to Blue
+        device.setLeds(leds)
+        device.qfadeLeds()
 
     def activate(self, device):
         def ModeWordReview():
@@ -378,6 +390,7 @@ class ModeWord:
                         device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT)])
                         self.jogFunction = "arrows"
                         self.wheel = "review"
+                        self.updateLED(device, "green")
                         if update:
                             device.updateDisplay()
                     case "review":
@@ -389,6 +402,7 @@ class ModeWord:
                         device.registerCallback(ModeWordDefault, KeyCode.JOG_PRESS)
                         self.jogFunction = "review"
                         self.wheel = "default"
+                        self.updateLED(device, "red")
                         if update:
                             device.updateDisplay(True)
                     case _:
@@ -398,6 +412,7 @@ class ModeWord:
                         device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_PAGE_UP)])
                         self.jogFunction = "default"
                         self.wheel = "arrows"
+                        self.updateLED(device, "blue")
                         if update:
                             device.updateDisplay()
 
@@ -558,32 +573,47 @@ class ModeFallback:
     def activate(self, device):
         device.sendTextFor("title", "Default", inverted=True) #Title
 
-        ### Buttons 2, 3, 6 and 7 are media controls ###
+        ### Buttons 2, 3 are shortcuts to a calculator and outlook respectively ###
 
-        device.sendIconFor(2, "icons/play.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_PLAY_PAUSE, ActionCode.PRESS)])
-        device.assignKey(KeyCode.SW2_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_PLAY_PAUSE, ActionCode.RELEASE)])
-        device.sendIconFor(3, "icons/skip-start.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_PREV, ActionCode.PRESS)])
-        device.assignKey(KeyCode.SW3_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_PREV, ActionCode.RELEASE)])
+        device.sendIconFor(2, "icons/calculator.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_CALCULATOR, ActionCode.PRESS)]) #device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_PLAY_PAUSE, ActionCode.PRESS)])
+        device.assignKey(KeyCode.SW3_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_CALCULATOR, ActionCode.RELEASE)]) #device.assignKey(KeyCode.SW2_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_PLAY_PAUSE, ActionCode.RELEASE)])
+        device.sendIconFor(3, "icons/envelope-open.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_EMAIL_READER, ActionCode.RELEASE)])
+        device.assignKey(KeyCode.SW3_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_EMAIL_READER, ActionCode.RELEASE)])
 
-        device.sendIconFor(6, "icons/stop.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_STOP, ActionCode.PRESS)])
-        device.assignKey(KeyCode.SW6_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_STOP, ActionCode.RELEASE)])
-        device.sendIconFor(7, "icons/skip-end.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW7_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_NEXT, ActionCode.PRESS)])
-        device.assignKey(KeyCode.SW7_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_NEXT, ActionCode.RELEASE)])
+        device.sendIconFor(6, "icons/journals.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_2), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.RELEASE)]) #Switches to number 2 on the taskbar
+        device.assignKey(KeyCode.SW6_RELEASE, [])
+        device.sendIconFor(7, "icons/calendar-event.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW7_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_NEXT, ActionCode.PRESS)]) #still to edit
+        device.assignKey(KeyCode.SW7_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_NEXT, ActionCode.RELEASE)]) #still to edit
 
 
-
+        def clockTime(): #needs adjusting for time
+            nowtime = datetime.now()
+            hour = nowtime.hour / 12 #datetime.hour /12
+            print (hour)
+            if hour > 1:
+                hour = hour / 2
+                print(hour)
+            on = 0x00ff00
+            off = 0xff0000
+            if  hour == 1:
+                leds = [on for i in range(device.nLeds)]
+            else:
+                leds = [on if hour > i/(device.nLeds-1) else off for i in range(device.nLeds)]
+            device.setLeds(leds)
+            
         ### Buttons 5 and 9 are shortcuts to applications ###
 
-        device.sendIconFor(5, "icons/envelope.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_EMAIL_READER, ActionCode.PRESS)])
-        device.assignKey(KeyCode.SW5_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_EMAIL_READER, ActionCode.RELEASE)])
-        device.sendIconFor(9, "icons/calculator.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW9_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_CALCULATOR, ActionCode.PRESS)])
-        device.assignKey(KeyCode.SW9_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_CALCULATOR, ActionCode.RELEASE)])
+        device.sendIconFor(5, "icons/browser-chrome1.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_3), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.RELEASE)]) #Switches to number 3 on the taskbar
+        device.assignKey(KeyCode.SW5_RELEASE, [])
+        device.sendIconFor(9, "icons/clock.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW9_PRESS, [])
+        device.assignKey(KeyCode.SW9_RELEASE, [])
+        device.registerCallback(clockTime, KeyCode.SW9_PRESS)
 
 
 
@@ -594,13 +624,14 @@ class ModeFallback:
             self.mqtt.setLight(target)
             self.lightState = target
             self.showLightState(device)
+            
 
-        self.lightState = self.mqtt.getLight
-        self.showLightState(device, False)
-
-        device.assignKey(KeyCode.SW4_PRESS, [])
+        #self.lightState = self.mqtt.getLight
+        #self.showLightState(device, False)
+        device.sendIconFor(4, "icons/envelope.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_2), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.RELEASE)]) #Switches to number 2 on the taskbar
         device.assignKey(KeyCode.SW4_RELEASE, [])
-        device.registerCallback(toggleLight, KeyCode.SW4_PRESS)
+        #device.registerCallback(toggleLight, KeyCode.SW4_PRESS)
 
 
         ### Button 8 set display and LEDs to a demo state (only used for videos and pictures of the thing)
@@ -625,9 +656,9 @@ class ModeFallback:
                 device.sendImage(x8, (device.dispH-w)//2, img.transpose(Image.ROTATE_90))
                 device.updateDisplay(True)
 
-        device.registerCallback(toggleDemo, KeyCode.SW8_PRESS)
-        device.sendIconFor(8, "icons/emoji-sunglasses.png", centered=(not self.demoActive))
-        device.assignKey(KeyCode.SW8_PRESS, [])
+        #device.registerCallback(toggleDemo, KeyCode.SW8_PRESS)
+        device.sendIconFor(8, "icons/microsoft-teams.png", centered=(not self.demoActive))
+        device.assignKey(KeyCode.SW8_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_6), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_WINDOWS, ActionCode.RELEASE)]) #Switches to number 6 on the taskbar
         device.assignKey(KeyCode.SW8_RELEASE, [])
 
         ### The jog wheel can be pressed to switch between three functions: Volume control, mouse wheel, arrow keys left/right ###

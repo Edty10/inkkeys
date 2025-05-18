@@ -34,11 +34,11 @@ mqtt = InkkeysMqtt(None, DEBUG) #Set address to "None" if you do not want to use
 os.chdir(os.path.dirname(os.path.abspath(__file__))) #Trying to fix the os.load error.
 
 modes = [\
+            {"mode": ModeWord(), "activeWindow": re.compile(".*Word$")}, \
+            {"mode": ModeVSCode(), "activeWindow": re.compile("^.*Visual Studio Code$")}, \
             {"mode": ModeOBS(), "process": "correct.exewillremainmodeontop"}, \
             {"mode": ModeBlender(), "activeWindow": re.compile("^Blender")}, \
             {"mode": ModeGimp(), "activeWindow": re.compile("^gimp.*")}, \
-            {"mode": ModeVSCode(), "activeWindow": re.compile("^.*Visual Studio Code$")}, \
-            {"mode": ModeWord(), "activeWindow": re.compile("^.*Word$")}, \
             {"mode": ModeFallback(mqtt)} \
         ]
 

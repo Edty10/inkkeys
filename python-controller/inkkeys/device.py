@@ -157,7 +157,7 @@ class Device:
             self.sendBinaryToDevice(data)
         self.imageBuffer = []
 
-    def updateDisplay(self, fullRefresh=False, timeout=5):
+    def updateDisplay(self, fullRefresh=False, timeout=2): #Originally 5, lowered to 2
         with self.awaitingResponseLock:
             start = time.time()
             self.sendToDevice(CommandCode.REFRESH.value + " " + (RefreshTypeCode.FULL.value if fullRefresh else RefreshTypeCode.PARTIAL.value))
@@ -261,6 +261,20 @@ class Device:
         if self.ledState == None:
             return
         p = (3.5 - (time.time() - self.ledTime))/0.5 #Stay on for 3 seconds and then fade out over 0.5 seconds
+        if p >= 1:
+            return
+        if p <= 0:
+            self.ledState = None
+            self.sendLed(["000000" for i in range(self.nLeds)])
+            return
+        dimmedLeds = [(int((i & 0xff0000) * p) & 0xff0000) | (int((i & 0xff00) * p) & 0xff00) | (int((i & 0xff) * p) & 0xff) for i in self.ledState]
+        ledStr = ['{:06x}'.format(i) for i in dimmedLeds]
+        self.sendLed(ledStr)
+    
+    def qfadeLeds(self): # A quicker fade
+        if self.ledState == None:
+            return
+        p = (0.5 - (time.time() - self.ledTime))/0.5 #fade out over 0.5 seconds
         if p >= 1:
             return
         if p <= 0:

@@ -25,7 +25,8 @@ from datetime import datetime
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume                                   # Get volume level in Windows
 from comtypes import CLSCTX_ALL                                         #Something Pycaw Requires apparently because it can't just have the things it does as modules
 
-
+global wordMode
+wordMode = "default" #Used to remember the current mode
 
         ############# Simple example. For Blender we just set up a few key assignments with corresponding images.
         ## Blender ## To be honest: Blender is just the minimalistic example here. Blender is very keyboard centric
@@ -251,9 +252,94 @@ class ModeVSCode:
             else:                            #Tool size in GIMP
                 device.clearCallback(KeyCode.JOG)
                 device.sendTextFor(1, "Arrows")
-                device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_BRACE)])
-                device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_RIGHT_BRACE)])
+                device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.MOUSE, MouseAxisCode.MOUSE_WHEEL, -1)])
+                device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.MOUSE, MouseAxisCode.MOUSE_WHEEL, 1)])
                 self.jogFunction = "horizontal"
+                if update:
+                    device.updateDisplay()
+
+
+        #Button 1 / jog dial press
+        device.registerCallback(toggleJogFunction, KeyCode.JOG_PRESS) #Call "toggleJogFunction" if the dial is pressed
+        device.assignKey(KeyCode.SW1_PRESS, [])                       #We do not send a key stroke when the dial is pressed, instead we use the callback.
+        device.assignKey(KeyCode.SW1_RELEASE, [])                     #We still need to overwrite the assignment to clear previously set assignments.
+        toggleJogFunction(False)    #We call toggleJogFunction to initially set the label and assignment
+        device.updateDisplay(True)      #Everything has been sent to the display. Time to refresh it.
+
+    def poll(self, device):
+        return False #Nothing to poll
+
+    def animate(self, device):
+        device.fadeLeds() #No LED animation is used in this mode, but we call "fadeLeds" anyway to fade colors that have been set in another mode before switching
+
+    def deactivate(self, device):
+        device.clearCallbacks() #Remove our callbacks if we switch to a different mode
+
+class ModeChrome:
+    jogFunction = ""    #Keeps track of the currently selected function of the jog dial
+
+    def activate(self, device):
+        device.sendTextFor("title", "Chrome", inverted=True)  #Title
+
+        #Button2 (top left)
+        device.sendIconFor(2, "icons/file-earmark-plus.png")
+        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_T), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Opens a new tab
+        device.assignKey(KeyCode.SW2_RELEASE, []) #could be used to open multiple tabs
+
+        #Button3 (left, second from top)
+        device.sendIconFor(3, "icons/file-earmark-excel-fill.png")
+        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_W), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Closes the current tab
+        device.assignKey(KeyCode.SW3_RELEASE, [])
+
+        #Button4 (left, third from top)
+        device.sendIconFor(4, "icons/arrow-left.png")
+        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE)]) #Hits back button
+        device.assignKey(KeyCode.SW4_RELEASE, [])
+
+        #Button5 (bottom left)
+        device.sendIconFor(5, "icons/clock-history.png")
+        device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_H), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #History
+        device.assignKey(KeyCode.SW5_RELEASE, [])
+
+        #Button6 (top right)
+        device.sendIconFor(6, "icons/files.png")
+        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_D), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_ENTER), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE)])#Duplicates tab
+        device.assignKey(KeyCode.SW6_RELEASE, [])
+
+        #Button7 (right, second from top)
+        device.sendIconFor(7, "icons/file-earmark-diff-fill.png")
+        device.assignKey(KeyCode.SW7_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_T), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Reopen closed tab
+        device.assignKey(KeyCode.SW7_RELEASE, [])
+
+        #Button8 (right, third from top)
+        device.sendIconFor(8, "icons/arrow-right.png")
+        device.assignKey(KeyCode.SW8_PRESS, [event(DeviceCode.CONSUMER, ConsumerKeycode.CONSUMER_BROWSER_FORWARD)]) #Hits Browser Forward Button
+        device.assignKey(KeyCode.SW8_RELEASE, [])
+
+        #Button9 (bottom right)
+        device.sendIconFor(9, "icons/download.png")
+        device.assignKey(KeyCode.SW9_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Opens downloads
+        device.assignKey(KeyCode.SW9_RELEASE, [])
+
+
+        self.jogFunction = ""
+
+        #This toggles the jog function and sets up key assignments and the label for the jog dial. It calls "updateDiplay()" if update is not explicitly set to False (for example if you need to update more parts of the display before updating it.)
+        def toggleJogFunction(update=True):
+            if self.jogFunction == "tabs":  
+                device.clearCallback(KeyCode.JOG)
+                device.sendTextFor(1, "Scroll")
+                device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.MOUSE, MouseAxisCode.MOUSE_WHEEL, -1)])
+                device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.MOUSE, MouseAxisCode.MOUSE_WHEEL, 1)])
+                self.jogFunction = "Scroll"
+                if update:
+                    device.updateDisplay()
+            else:                            
+                device.clearCallback(KeyCode.JOG)
+                device.sendTextFor(1, "Change tabs")
+                device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_TAB), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)])
+                device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS) , event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_TAB), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)])
+                self.jogFunction = "tabs"
                 if update:
                     device.updateDisplay()
 
@@ -379,9 +465,12 @@ class ModeWord:
 
             self.jogFunction = ""
             self.wheel = ""
+            if wordMode != "default":
+                self.wheel = wordMode
 
             #This toggles the jog function and sets up key assignments and the label for the jog dial. It calls "updateDiplay()" if update is not explicitly set to False (for example if you need to update more parts of the display before updating it.)
             def toggleJogFunction(update=True):
+                global wordMode
                 match self.wheel:
                     case "arrows":
                         device.clearCallback(KeyCode.JOG)
@@ -401,6 +490,7 @@ class ModeWord:
                         device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_UP_ARROW)])
                         device.registerCallback(ModeWordDefault, KeyCode.JOG_PRESS)
                         self.jogFunction = "review"
+                        wordMode = self.jogFunction
                         self.wheel = "default"
                         self.updateLED(device, "red")
                         if update:
@@ -411,6 +501,7 @@ class ModeWord:
                         device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_PAGE_DOWN)])
                         device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_PAGE_UP)])
                         self.jogFunction = "default"
+                        wordMode = self.jogFunction
                         self.wheel = "arrows"
                         self.updateLED(device, "blue")
                         if update:
@@ -425,7 +516,7 @@ class ModeWord:
             device.updateDisplay(True)      #Everything has been sent to the display. Time to refresh it.
         
         ModeWordDefault()
-
+    
 
     def poll(self, device):
         return False #Nothing to poll
@@ -590,19 +681,29 @@ class ModeFallback:
         device.assignKey(KeyCode.SW7_RELEASE, [event(DeviceCode.CONSUMER, ConsumerKeycode.MEDIA_NEXT, ActionCode.RELEASE)]) #still to edit
 
 
-        def clockTime(): #needs adjusting for time
+        def clockTime():
             nowtime = datetime.now()
-            hour = nowtime.hour / 12 #datetime.hour /12
+            hour = nowtime.hour
+            minute = round(nowtime.minute /60 *12)
             print (hour)
-            if hour > 1:
-                hour = hour / 2
+            if hour > 12:
+                hour = hour - 12
                 print(hour)
+            hour = hour / 12
             on = 0x00ff00
             off = 0xff0000
+            blue = 0x0000ff
             if  hour == 1:
                 leds = [on for i in range(device.nLeds)]
             else:
-                leds = [on if hour > i/(device.nLeds-1) else off for i in range(device.nLeds)]
+                leds = [on if hour > i/(device.nLeds+1) else off for i in range(device.nLeds)]
+                if hour > (1/12):
+                    leds[0] = off
+            if leds[(minute)] != leds[(minute + 1)]:
+                blue = 0x00ff10 #this is a lie
+            elif leds[(minute)] != leds[(minute - 1)]:
+                blue = 0xff0010 #this is a lie
+            leds[minute] = blue
             device.setLeds(leds)
             
         ### Buttons 5 and 9 are shortcuts to applications ###

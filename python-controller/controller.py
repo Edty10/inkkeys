@@ -35,6 +35,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__))) #Trying to fix the os.load 
 
 modes = [\
             {"mode": ModeWord(), "activeWindow": re.compile(".*Word$")}, \
+            {"mode": ModeChrome(), "activeWindow": re.compile("^.*Google Chrome$")}, \
             {"mode": ModeVSCode(), "activeWindow": re.compile("^.*Visual Studio Code$")}, \
             {"mode": ModeOBS(), "process": "correct.exewillremainmodeontop"}, \
             {"mode": ModeBlender(), "activeWindow": re.compile("^Blender")}, \
